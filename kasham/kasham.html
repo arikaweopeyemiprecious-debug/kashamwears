@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasham Wears - Premium Sandals Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+body{background:#0f172a;color:white;}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px;background:#020617;}
+.logo{font-size:24px;font-weight:bold;color:#ff6b6b;}
+nav a{color:white;margin-left:20px;text-decoration:none;cursor:pointer;}
+nav a.active{color:#ff6b6b;}
+section{display:none;padding:40px;text-align:center;}
+section.active{display:block;}
+.hero h1{font-size:40px;margin-bottom:10px;}
+.hero p{color:#94a3b8;font-size:18px;}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;}
+.card{background:#020617;padding:20px;border-radius:10px;text-align:center;transition:transform .2s;}
+.card:hover{transform:translateY(-5px);}
+.card img{width:100%;height:180px;object-fit:cover;border-radius:8px;}
+.price{color:#ff6b6b;font-weight:bold;margin:10px 0;}
+button{padding:10px 15px;border:none;background:#ff6b6b;color:white;border-radius:6px;cursor:pointer;}
+button:hover{opacity:0.8;}
+footer{text-align:center;padding:20px;margin-top:40px;background:#020617;color:#94a3b8;}
+form{display:flex;flex-direction:column;gap:15px;max-width:400px;margin:0 auto;}
+input,textarea{padding:10px;border-radius:6px;border:1px solid #333;background:#020617;color:white;width:100%;}
+.whatsapp-btn{background:#25D366;color:white;border:none;padding:10px 15px;border-radius:6px;cursor:pointer;}
+.whatsapp-btn:hover{opacity:0.9;}
+#home{height: 70vh;}
+#home h1{margin-top: 10%;}
+#about{height: 70vh;}
+#about h1{margin-top: 10%;}
+#contact{height: 70vh;}
+#contact p{margin-top: 2%;}
+#contact form{margin-top: 2%;}
+.cart-icon{position:fixed;right:20px;bottom:20px;background:#fff;color:#020617;padding:15px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;}
+.cart-count{position:absolute;top:-5px;right:-5px;background:#ff6b6b;color:white;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;}
+#checkoutModal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:1001;}
+#checkoutModal .modal-content{background:#020617;padding:30px;border-radius:10px;width:90%;max-width:450px;text-align:left;position:relative;}
+#checkoutModal h2{margin-bottom:15px;}
+#checkoutModal .close-btn{position:absolute;top:10px;right:10px;background:transparent;border:none;color:white;font-size:18px;cursor:pointer;}
+#checkoutModal form input, #checkoutModal form textarea{margin-bottom:10px;}
+#checkoutModal form button{width:100%;}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">Kasham Wears</div>
+<nav>
+<a id="navHome" class="active">Home</a>
+<a id="navShop">Shop</a>
+<a id="navAbout">About</a>
+<a id="navContact">Contact</a>
+</nav>
+</header>
+
+<!-- Home Section -->
+<section id="home" class="active hero">
+<h1>Welcome to Kasham Wears</h1>
+<p>Premium Quality Sandals for Men and Women. Stylish, comfortable, and made to last.</p>
+</section>
+
+<!-- Shop Section -->
+<section id="shop">
+<h1>Our Sandals Collection</h1>
+<div class="products" id="products"></div>
+</section>
+
+<!-- About Section -->
+<section id="about">
+<h1>About Kasham Wears</h1>
+<p>Kasham Wears is dedicated to bringing you high-quality, stylish sandals for every occasion. Founded in 2026, we believe in comfort, fashion, and affordable luxury. Our sandals are carefully crafted to make every step feel like a walk on clouds.</p>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+<h1>Contact Kasham Wears</h1>
+<p>Send us a message via WhatsApp and we’ll get back to you promptly.</p>
+<form id="contactForm">
+<input type="text" id="cName" placeholder="Your Name" required>
+<input type="email" id="cEmail" placeholder="Your Email" required>
+<textarea id="cMessage" placeholder="Your Message" rows="5" required></textarea>
+<button type="submit" class="whatsapp-btn">Send via WhatsApp</button>
+</form>
+</section>
+
+<!-- Cart Icon -->
+<div class="cart-icon" id="cartIcon">🛒<div class="cart-count" id="cartCount">0</div></div>
+
+<!-- Checkout Modal -->
+<div id="checkoutModal">
+<div class="modal-content">
+<button class="close-btn" id="closeCheckout">✖</button>
+<h2>Checkout</h2>
+<form id="checkoutForm">
+<input type="text" id="fullName" placeholder="Full Name" required>
+<input type="email" id="emailAddress" placeholder="Email Address" required>
+<textarea id="homeAddress" placeholder="Home Address" rows="3" required></textarea>
+<button type="submit" class="whatsapp-btn">Send Order via WhatsApp</button>
+</form>
+</div>
+</div>
+
+<footer>
+© 2026 Kasham Wears | Premium Sandals Store
+</footer>
+
+<script>
+// Navigation
+const sections = {home: document.getElementById("home"), shop: document.getElementById("shop"), about: document.getElementById("about"), contact: document.getElementById("contact")};
+const navLinks = {home: document.getElementById("navHome"), shop: document.getElementById("navShop"), about: document.getElementById("navAbout"), contact: document.getElementById("navContact")};
+
+function showSection(section){
+  Object.values(sections).forEach(s=>s.classList.remove("active"));
+  sections[section].classList.add("active");
+  Object.values(navLinks).forEach(l=>l.classList.remove("active"));
+  navLinks[section].classList.add("active");
+}
+
+navLinks.home.onclick = ()=>showSection("home");
+navLinks.shop.onclick = ()=>showSection("shop");
+navLinks.about.onclick = ()=>showSection("about");
+navLinks.contact.onclick = ()=>showSection("contact");
+
+// Shop products
+const products = [
+{name:"Female palm sandal", price:15000, image:"sandal1.jpg"},
+{name:"Brown Palm Sandal", price:20000, image:"sandal2.jpg"},
+{name:"Half Shoe", price:5000, image:"sandal3.jpg"},
+{name:"Female Loafers", price:4000, image:"sandal4.jpg"},
+{name:"Male Loafers", price:3800, image:"sandal5.jpg"},
+{name:"Male Boot", price:20000, image:"sandal6.jpg"},
+{name:" Female Boot", price:18000, image:"sandal7.jpg"},
+{name:"Male Dress Shoe", price:4500, image:"sandal8.jpg"},
+{name:"Female Dress Shoe", price:3300, image:"sandal9.jpg"},
+{name:"Feamale Dress Shoe", price:4800, image:"sandal10.jpg"}
+];
+
+const productsContainer = document.getElementById("products");
+let cart = [];
+
+
+function renderProducts(){
+  productsContainer.innerHTML = "";
+  products.forEach((product,index)=>{
+    const card=document.createElement("div");
+    card.classList.add("card");
+    card.innerHTML=`
+      <img src="${product.image}">
+      <h3>${product.name}</h3>
+      <p class="price">₦${product.price}</p>
+      <button onclick="addToCart(${index})">Add to Cart</button>
+    `;
+    productsContainer.appendChild(card);
+  });
+}
+renderProducts();
+
+function addToCart(index){
+  cart.push(products[index]);
+  document.getElementById("cartCount").textContent = cart.length;
+  alert(`${products[index].name} added to cart!`);
+}
+
+// Cart icon click
+const cartIcon = document.getElementById("cartIcon");
+const checkoutModal = document.getElementById("checkoutModal");
+const closeCheckout = document.getElementById("closeCheckout");
+
+cartIcon.onclick = ()=>{ 
+  if(cart.length === 0){ alert("Cart is empty!"); return; }
+  checkoutModal.style.display = "flex"; 
+};
+closeCheckout.onclick = ()=>{ checkoutModal.style.display="none"; };
+
+// Checkout form
+document.getElementById("checkoutForm").onsubmit = function(e){
+  e.preventDefault();
+  const name = document.getElementById("fullName").value.trim();
+  const email = document.getElementById("emailAddress").value.trim();
+  const address = document.getElementById("homeAddress").value.trim();
+  if(!name || !email || !address){ alert("Fill all fields"); return; }
+  let orderText = `Hello, I am ${name} (${email}) and I want to order the following sandals:%0A`;
+  cart.forEach((item,i)=>{
+    orderText += `${i+1}. ${item.name} - ₦${item.price}%0A`;
+  });
+  orderText += `Home Address: ${address}`;
+  window.open(`https://wa.me/2349168611992?text=${orderText}`,'_blank');
+  cart = [];
+  document.getElementById("cartCount").textContent = 0;
+  checkoutModal.style.display="none";
+};
+
+// Contact form WhatsApp
+document.getElementById("contactForm").onsubmit = function(e){
+  e.preventDefault();
+  const name=document.getElementById("cName").value.trim();
+  const email=document.getElementById("cEmail").value.trim();
+  const message=document.getElementById("cMessage").value.trim();
+  if(!name || !email || !message){alert("Fill all fields."); return;}
+  let waMessage=`Hello, I am ${name} (${email}) and I want to contact Kasham Wears. Message: ${message}`;
+  window.open(`https://wa.me/2349168611992?text=${encodeURIComponent(waMessage)}`,'_blank');
+};
+</script>
+
+</body>
+</html>
